@@ -28,14 +28,14 @@ end
 
 def check_exit_code
   #raise if exit code ($?) not good (0)
-  raise unless $?.to_i === 0 # should raise a messange from caller
+  raise unless $?.to_i === 0 #TODO should raise a messange from caller
   $?.to_i
 end
 
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
 tempdir_path = Dir.mktmpdir
 Dir.chdir(tempdir_path)
-#check git is installed.
+#TODO check git is installed.
 
 ################ For Testing Purposes ###################
 # sublime_packages_path = "C:/Sites/Packages"
