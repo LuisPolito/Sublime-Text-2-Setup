@@ -87,7 +87,7 @@ end
 update_theme_file() if File.exists?(sublime_packages_path + 
   "/Theme - Default/Widget.sublime-settings")
 
-#user path
+#Ones that install on the user path
 #Install Auxiliary files rails_tutorial_sublime_text
 %x[git clone git@github.com:mhartl/rails_tutorial_sublime_text.git]
 contents_of_directory = Dir.glob('rails_tutorial_sublime_text/*')
@@ -96,7 +96,7 @@ contents_of_directory.each do |file|
   check_exit_code()
 end
 
-#Install Sublime ERB #is this right?
+#Install Sublime ERB 
 %x[git clone git@github.com:eddorre/SublimeERB.git sublime_erb]
 check_exit_code()
 FileUtils.cp_r('sublime_erb', sublime_user_packages_path)
