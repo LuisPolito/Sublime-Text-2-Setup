@@ -3,7 +3,12 @@ require 'tmpdir'
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
-  home = Dir.home
+  if Dir.respond_to?(:home)
+    home = Dir.home #JRuby doesn't respond to Dir.home
+  else
+    home = ENV['HOME']
+  end
+  
   case system
   when /mingw/, /Windows/
     sublime_packages_path = home + "/AppData/Roaming/Sublime Text 2/Packages"
@@ -15,14 +20,11 @@ def set_sublime_dir(system = RUBY_PLATFORM)
     sublime_packages_path = home + "/.config/sublime-text-2/Packages"
     sublime_user_packages_path = home + "/.config/sublime-text-2/Packages/User"
   when /java/
-    raise #"JRuby not Supported" There is a Bug in Jruby Dir.cp_r copying unicode-named folders
-    # require 'java'
-    # java_os_result = java.lang.System.get_property('os.name')
-    # sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
+    require 'java'
+    java_os_result = java.lang.System.get_property('os.name')
+    sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
+    abort("JRuby not Supported") #There is a Bug in Jruby Dir.cp_r copying unicode-named folders
   end
-  #Test it worked
-  raise unless Dir.exists?(sublime_packages_path)
-  raise unless Dir.exists?(sublime_user_packages_path)
   [sublime_packages_path, sublime_user_packages_path]
 end
 
@@ -33,6 +35,9 @@ def check_exit_code
 end
 
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
+#Test it worked
+  raise unless File.exists?(sublime_packages_path) #Dir.exists not on Jruby
+  raise unless File.exists?(sublime_user_packages_path) #Dir.exists not on Jruby
 tempdir_path = Dir.mktmpdir
 Dir.chdir(tempdir_path)
 #TODO check git is installed.
