@@ -74,7 +74,7 @@ check_exit_code()
 # puts  'Change file "Theme - Default/widget.sublime-settings" from Packages'
 # puts  'from color_scheme": "Packages/Theme - Default/Widgets.stTheme"'
 # puts  'to "color_scheme": "Packages/User/CustomTestConsole.tmTheme"'
-def update_theme_file()
+def update_theme_file(sublime_packages_path, tempdir_path)
   Dir.chdir(sublime_packages_path)
   file_contents = File.read("/Theme - Default/Widget.sublime-settings").gsub(
     "Packages/Theme - Default/Widgets.stTheme",
@@ -84,7 +84,7 @@ def update_theme_file()
   check_exit_code()
   Dir.chdir(tempdir_path)
 end
-update_theme_file() if File.exists?(sublime_packages_path + 
+update_theme_file(sublime_packages_path, tempdir_path) if File.exists?(sublime_packages_path + 
   "/Theme - Default/Widget.sublime-settings")
 
 #Ones that install on the user path
