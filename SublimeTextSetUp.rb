@@ -54,6 +54,8 @@ Dir.chdir(tempdir_path)
 #Install Rails Tutorial Snippets
 %x[git clone git@github.com:mhartl/rails_tutorial_snippets.git RailsTutorial]
 check_exit_code()
+FileUtils.rm_r('RailsTutorial/.git') if File.exists?('RailsTutorial/.git')
+check_exit_code()
 FileUtils.cp_r('RailsTutorial', sublime_packages_path)
 check_exit_code()
 
@@ -69,11 +71,11 @@ end
 #Instal RubyTest
 %x[git clone https://github.com/maltize/sublime-text-2-ruby-tests.git RubyTest]
 check_exit_code()
+FileUtils.rm_r('RubyTest/.git') if File.exists?('RubyTest/.git')
+check_exit_code()
 FileUtils.cp_r('RubyTest', sublime_packages_path)
 check_exit_code()
-# puts  'Change file "Theme - Default/widget.sublime-settings" from Packages'
-# puts  'from color_scheme": "Packages/Theme - Default/Widgets.stTheme"'
-# puts  'to "color_scheme": "Packages/User/CustomTestConsole.tmTheme"'
+
 def update_theme_file(path)
   #Dir.chdir(path)
   puts 'Updating file "Theme - Default/widget.sublime-settings" with new settings'
@@ -97,6 +99,8 @@ end
 
 #Install Sublime ERB 
 %x[git clone git@github.com:eddorre/SublimeERB.git sublime_erb]
+check_exit_code()
+FileUtils.rm_r('sublime_erb/.git') if File.exists?('sublime_erb/.git')
 check_exit_code()
 FileUtils.cp_r('sublime_erb', sublime_user_packages_path)
 check_exit_code()
