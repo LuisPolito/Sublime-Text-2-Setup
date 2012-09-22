@@ -74,18 +74,17 @@ check_exit_code()
 # puts  'Change file "Theme - Default/widget.sublime-settings" from Packages'
 # puts  'from color_scheme": "Packages/Theme - Default/Widgets.stTheme"'
 # puts  'to "color_scheme": "Packages/User/CustomTestConsole.tmTheme"'
-def update_theme_file(sublime_packages_path, tempdir_path)
-  Dir.chdir(sublime_packages_path)
-  file_contents = File.read("/Theme - Default/Widget.sublime-settings").gsub(
+def update_theme_file(path)
+  #Dir.chdir(path)
+  puts 'Updating file "Theme - Default/widget.sublime-settings" with new settings'
+  file_contents = File.read(path +"/Theme - Default/Widget.sublime-settings").gsub(
     "Packages/Theme - Default/Widgets.stTheme",
     "Packages/User/CustomTestConsole.tmTheme") 
-  puts 'Updating file "Theme - Default/widget.sublime-settings" with new settings'
-  File.open("/Theme - Default/Widget.sublime-settings", "w+") {|file| file.write(file_contents)}
+  File.open(path + "/Theme - Default/Widget.sublime-settings", "w+") {|file| file.write(file_contents)}
   check_exit_code()
-  Dir.chdir(tempdir_path)
+  #Dir.chdir(tempdir_path)
 end
-update_theme_file(sublime_packages_path, tempdir_path) if File.exists?(sublime_packages_path + 
-  "/Theme - Default/Widget.sublime-settings")
+update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path + "/Theme - Default/Widget.sublime-settings")
 
 #Ones that install on the user path
 #Install Auxiliary files rails_tutorial_sublime_text
