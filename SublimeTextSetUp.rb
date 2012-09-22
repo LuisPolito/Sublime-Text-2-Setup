@@ -3,7 +3,7 @@ require 'tmpdir'
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
-	home = Dir.home
+  home = Dir.home
   case system
   when /mingw/, /Windows/
     sublime_packages_path = home + "/AppData/Roaming/Sublime Text 2/Packages"
@@ -77,14 +77,12 @@ FileUtils.cp_r('RubyTest', sublime_packages_path)
 check_exit_code()
 
 def update_theme_file(path)
-  #Dir.chdir(path)
   puts 'Updating file "Theme - Default/widget.sublime-settings" with new settings'
   file_contents = File.read(path +"/Theme - Default/Widget.sublime-settings").gsub(
     "Packages/Theme - Default/Widgets.stTheme",
     "Packages/User/CustomTestConsole.tmTheme") 
   File.open(path + "/Theme - Default/Widget.sublime-settings", "w+") {|file| file.write(file_contents)}
   check_exit_code()
-  #Dir.chdir(tempdir_path)
 end
 update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path + "/Theme - Default/Widget.sublime-settings")
 
