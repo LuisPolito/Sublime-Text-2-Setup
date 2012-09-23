@@ -40,7 +40,8 @@ sublime_packages_path, sublime_user_packages_path = set_sublime_dir
   raise unless File.exists?(sublime_user_packages_path) #Dir.exists not on Jruby
 tempdir_path = Dir.mktmpdir
 Dir.chdir(tempdir_path)
-#TODO check git is installed.
+gitver = %x[git --version]
+abort("Git Required") unless gitver.match(/^git version [1-9]\.[1-9]\.[1-9]/)
 
 ################ For Testing Purposes ###################
 # sublime_packages_path = "C:/Sites/Packages"
@@ -86,10 +87,13 @@ def update_theme_file(path)
   file_contents = File.read(path +"/Theme - Default/Widget.sublime-settings").gsub(
     "Packages/Theme - Default/Widgets.stTheme",
     "Packages/User/CustomTestConsole.tmTheme") 
-  File.open(path + "/Theme - Default/Widget.sublime-settings", "w+") {|file| file.write(file_contents)}
+  File.open(path + "/Theme - Default/Widget.sublime-settings", "w+") do |file| 
+    file.write(file_contents)
+  end
   check_exit_code()
 end
-update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path + "/Theme - Default/Widget.sublime-settings")
+update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path + \
+  "/Theme - Default/Widget.sublime-settings")
 
 #Ones that install on the user path
 #Install Auxiliary files rails_tutorial_sublime_text
