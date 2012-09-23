@@ -4,7 +4,7 @@ require 'tmpdir'
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
   if Dir.respond_to?(:home)
-    home = Dir.home #JRuby doesn't respond to Dir.home
+    home = Dir.home #1.8.7 doesn't respond to Dir.home
   else
     home = ENV['HOME']
   end
@@ -23,7 +23,7 @@ def set_sublime_dir(system = RUBY_PLATFORM)
     require 'java'
     java_os_result = java.lang.System.get_property('os.name')
     sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
-    abort("JRuby not Supported") #There is a Bug in Jruby Dir.cp_r copying unicode-named folders
+    abort("JRuby not Supported") #There is a **Bug in Jruby** Dir.cp_r copying unicode-named folders
   end
   [sublime_packages_path, sublime_user_packages_path]
 end
@@ -74,7 +74,7 @@ contents_of_directory.each do |file|
   check_exit_code()
 end
 
-#Instal RubyTest
+#Install RubyTest
 %x[git clone https://github.com/maltize/sublime-text-2-ruby-tests.git RubyTest]
 check_exit_code()
 FileUtils.rm_r('RubyTest/.git') if File.exists?('RubyTest/.git')
