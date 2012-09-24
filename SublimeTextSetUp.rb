@@ -24,9 +24,9 @@ def set_sublime_dir(system = RUBY_PLATFORM)
   [sublime_packages_path, sublime_user_packages_path]
 end
 
-def check_exit_code
+def check_exit_code(message= "#{caller().first}")
   #raise if exit code ($?) not good (0)
-  raise unless $?.to_i === 0 #TODO should raise a messange from caller
+  raise message unless $?.to_i === 0 
   $?.to_i
 end
 
