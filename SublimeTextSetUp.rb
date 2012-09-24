@@ -3,11 +3,7 @@ require 'tmpdir'
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
-  if Dir.respond_to?(:home)
-    home = Dir.home #1.8.7 doesn't respond to Dir.home
-  else
-    home = ENV['HOME']
-  end
+  Dir.respond_to?(:home) ? home = Dir.home : home = ENV['HOME']
   
   case system
   when /mingw/, /Windows/
