@@ -19,10 +19,11 @@ def set_sublime_dir(system = RUBY_PLATFORM)
     require 'java'
     java_os_result = java.lang.System.get_property('os.name')
     sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
-    abort("JRuby not Supported") 
-    #There is a **Bug in Jruby** Dir.cp_r copying unicode-named folders in Windows:
+    puts "JRuby support experimental" #abort("JRuby not Supported") 
+    #There is a **Bug in JRuby** Dir.cp_r copying unicode-named folders in Windows:
     #RuntimeError: unknown file type: SASS/Commands/Insert ColorGC??.tmCommand
     #copy at C:/RailsInstaller/jruby-1.7.0.RC1/lib/ruby/1.9/fileutils.rb:1374
+    #Real file name: Insert ColorGCÌ§Âª.tmCommand
   end
   [sublime_packages_path, sublime_user_packages_path]
 end
@@ -33,11 +34,16 @@ def check_exit_code(message= "#{caller().first}")
   $?.to_i
 end
 
+def jruby?
+  RUBY_PLATFORM === "java"
+end
+
+###########################################################
 #Set paths
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
 tempdir_path = Dir.mktmpdir
 Dir.chdir(tempdir_path)
-#Test it worked
+#Test paths set correctly
   raise unless File.exists?(sublime_packages_path) 
   raise unless File.exists?(sublime_user_packages_path) 
 
@@ -53,7 +59,11 @@ gitver = %x[git --version]
 #Install SASS Higlighting
 %x[git clone https://github.com/n00ge/sublime-text-haml-sass.git]
 Dir.chdir("sublime-text-haml-sass")
-FileUtils.cp_r('SASS', sublime_packages_path)
+if jruby?
+  FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
+else
+  FileUtils.cp_r('SASS', sublime_packages_path)
+end
 check_exit_code()
 FileUtils.cp_r('Ruby Haml', sublime_packages_path)
 check_exit_code()
