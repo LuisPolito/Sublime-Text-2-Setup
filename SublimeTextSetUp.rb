@@ -19,7 +19,10 @@ def set_sublime_dir(system = RUBY_PLATFORM)
     require 'java'
     java_os_result = java.lang.System.get_property('os.name')
     sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
-    abort("JRuby not Supported") #There is a **Bug in Jruby** Dir.cp_r copying unicode-named folders
+    abort("JRuby not Supported") 
+    #There is a **Bug in Jruby** Dir.cp_r copying unicode-named folders in Windows:
+    #RuntimeError: unknown file type: SASS/Commands/Insert ColorGC??.tmCommand
+    #copy at C:/RailsInstaller/jruby-1.7.0.RC1/lib/ruby/1.9/fileutils.rb:1374
   end
   [sublime_packages_path, sublime_user_packages_path]
 end
