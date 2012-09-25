@@ -38,10 +38,10 @@ def jruby?
   RUBY_PLATFORM === "java"
 end
 
-###########################################################
-#Set paths
+## Set paths ##
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
 tempdir_path = Dir.mktmpdir
+puts "Using temp dir: #{tempdir_path}"
 Dir.chdir(tempdir_path)
 #Test paths set correctly
   raise unless File.exists?(sublime_packages_path) 
