@@ -1,5 +1,16 @@
 #! /usr/bin/env ruby
 require 'tmpdir'
+begin
+  require 'rainbow'
+rescue LoadError
+  unless "".respond_to?(:color)
+    class String
+      def color(*args)
+        self
+      end
+    end
+  end
+end
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
