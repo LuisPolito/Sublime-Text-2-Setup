@@ -3,9 +3,11 @@ require 'tmpdir'
 begin
   require 'rainbow'
 rescue LoadError
-  unless "".respond_to?(:color)
-    class String
-      def color(*args)
+  class String
+    def color(*args)
+      if "".respond_to?(:color)
+        super
+      else
         self
       end
     end
