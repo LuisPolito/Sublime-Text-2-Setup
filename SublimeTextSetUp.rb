@@ -79,6 +79,7 @@ check_exit_code()
 FileUtils.cp_r('Ruby Haml', sublime_packages_path)
 check_exit_code()
 Dir.chdir(tempdir_path)
+puts "Installed SASS and Haml highlighting.".color(:green)
 
 #Install Rails Tutorial Snippets
 %x[git clone git@github.com:mhartl/rails_tutorial_snippets.git RailsTutorial]
@@ -87,6 +88,7 @@ FileUtils.rm_r('RailsTutorial/.git') if File.exists?('RailsTutorial/.git')
 check_exit_code()
 FileUtils.cp_r('RailsTutorial', sublime_packages_path)
 check_exit_code()
+puts "Installed Rails Tutorial Snippets.".color(:green)
 
 #Install Alternative Auto-completion
 %x[git clone git://github.com/alexstaubo/sublime_text_alternative_autocompletion.git]
@@ -96,6 +98,7 @@ contents_of_directory.each do |file|
   FileUtils.cp(file, sublime_packages_path)
   check_exit_code()
 end
+puts "Installed Alternative Auto-completion.".color(:green)
 
 #Install RubyTest
 %x[git clone https://github.com/maltize/sublime-text-2-ruby-tests.git RubyTest]
@@ -117,6 +120,7 @@ def update_theme_file(path)
 end
 update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path + \
   "/Theme - Default/Widget.sublime-settings")
+puts "Installed RubyTest.".color(:green)
 
 #Ones that install on the user path
 #Install Auxiliary files rails_tutorial_sublime_text
@@ -126,6 +130,7 @@ contents_of_directory.each do |file|
   FileUtils.cp(file , sublime_user_packages_path)
   check_exit_code()
 end
+puts "Installed Auxiliary files for rails tutorial.".color(:green)
 
 #Install Sublime ERB 
 %x[git clone git@github.com:eddorre/SublimeERB.git sublime_erb]
@@ -134,5 +139,7 @@ FileUtils.rm_r('sublime_erb/.git') if File.exists?('sublime_erb/.git')
 check_exit_code()
 FileUtils.cp_r('sublime_erb', sublime_user_packages_path)
 check_exit_code()
+puts "Installed Sublime ERB (needs manual action to complete).".color(:yellow)
 puts 'open keybindings file add   { "keys": ["ctrl+shift+."], "command": "erb" }'
+
 
