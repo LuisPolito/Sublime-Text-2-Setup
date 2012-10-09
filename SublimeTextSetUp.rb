@@ -45,9 +45,9 @@ def check_exit_code(message= "#{caller().first}")
   $?.to_i
 end
 
-def jruby?
-  RUBY_PLATFORM === "java"
-end
+# def jruby?
+#   RUBY_PLATFORM === "java"
+# end
 
 ## Set paths ##
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
@@ -70,7 +70,7 @@ gitver = %x[git --version]
 #Install SASS Higlighting
 %x[git clone https://github.com/n00ge/sublime-text-haml-sass.git]
 Dir.chdir("sublime-text-haml-sass") do
-  if jruby?
+  if RUBY_ENGINE === "jruby"
     FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
   else
     FileUtils.cp_r('SASS', sublime_packages_path)
