@@ -5,11 +5,11 @@ begin
 rescue LoadError
   class String
     def color(*args)
-      if "".respond_to?(:color)
-        super
-      else
+      #if "".respond_to?(:color)
+      #  super
+      #else
         self
-      end
+      #end
     end
   end
 end
