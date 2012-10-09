@@ -69,16 +69,17 @@ gitver = %x[git --version]
 
 #Install SASS Higlighting
 %x[git clone https://github.com/n00ge/sublime-text-haml-sass.git]
-Dir.chdir("sublime-text-haml-sass")
-if jruby?
-  FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
-else
-  FileUtils.cp_r('SASS', sublime_packages_path)
+Dir.chdir("sublime-text-haml-sass") do
+  if jruby?
+    FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
+  else
+    FileUtils.cp_r('SASS', sublime_packages_path)
+  end
+  check_exit_code()
+  FileUtils.cp_r('Ruby Haml', sublime_packages_path)
+  check_exit_code()
 end
-check_exit_code()
-FileUtils.cp_r('Ruby Haml', sublime_packages_path)
-check_exit_code()
-Dir.chdir(tempdir_path)
+#Dir.chdir(tempdir_path)
 puts "Installed SASS and Haml highlighting.".color(:green)
 
 #Install Rails Tutorial Snippets
