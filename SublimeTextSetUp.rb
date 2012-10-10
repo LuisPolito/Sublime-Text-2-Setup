@@ -8,14 +8,9 @@ end
 
 class Msg < String
   def color(*args)
-    if "".respond_to?(:color)
-      super
-    else
-      self
-    end
+    "".respond_to?(:color) ? super : self
   end
 end
-
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
