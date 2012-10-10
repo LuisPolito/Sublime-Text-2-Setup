@@ -10,21 +10,10 @@ class Msg < String
       self
     end
   end
-# There has got to be an easier way to feed the colors through :color 
-  def red
-    colorize(31)
-  end
 
-  def green
-    colorize(32)
-  end
-
-  def yellow
-    colorize(33)
-  end
-  
   def color(*args)
-    self.send(args[0])
+    colours = {:red => 31, :green => 32, :yellow => 33}
+    self.send :colorize, colours[args[0]]
   end
 end
 
