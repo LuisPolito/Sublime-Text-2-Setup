@@ -4,11 +4,7 @@ require 'tmpdir'
 class Msg < String
   def colorize(color_code)
     #from StackOverflow [http://stackoverflow.com/questions/1489183/colorized-ruby-output]
-    if STDOUT.tty?
-      "\e[#{color_code}m#{self}\e[0m" 
-    else
-      self
-    end
+    STDOUT.tty? ? "\e[#{color_code}m#{self}\e[0m" : self
   end
 
   def color(*args)
@@ -19,6 +15,7 @@ end
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
+   # Set Home directory.
   Dir.respond_to?(:home) ? home = Dir.home : home = ENV['HOME']
   
   case system
