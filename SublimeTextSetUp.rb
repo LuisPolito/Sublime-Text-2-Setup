@@ -1,14 +1,30 @@
 #! /usr/bin/env ruby
 require 'tmpdir'
-begin
-  require 'rainbow'
-rescue LoadError
-  puts "To get color out put install the gem 'rainbow' with 'gem install rainbow'"
-end
 
 class Msg < String
+  def colorize(color_code)
+    #from StackOverflow [http://stackoverflow.com/questions/1489183/colorized-ruby-output]
+    if STDOUT.tty?
+      "\e[#{color_code}m#{self}\e[0m" 
+    else
+      self
+    end
+  end
+# There has got to be an easier way to feed the colors through :color 
+  def red
+    colorize(31)
+  end
+
+  def green
+    colorize(32)
+  end
+
+  def yellow
+    colorize(33)
+  end
+  
   def color(*args)
-    "".respond_to?(:color) ? super : self
+    self.send(args[0])
   end
 end
 
