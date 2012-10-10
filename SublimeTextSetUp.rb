@@ -51,10 +51,6 @@ def check_exit_code(message= "#{caller().first}")
   $?.to_i
 end
 
-# def jruby?
-#   RUBY_PLATFORM === "java"
-# end
-
 ## Set paths ##
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
 tempdir_path = Dir.mktmpdir
@@ -65,8 +61,8 @@ Dir.chdir(tempdir_path)
   raise unless File.exists?(sublime_user_packages_path) 
 
 #Test if Git is installed or exit
-gitver = %x[git --version]
-  abort("Git Required") unless gitver.match(/^git version [1-9]\.[1-9]\.[1-9]/)
+git_version = %x[git --version]
+  abort("Git Required") unless git_version.match(/^git version [1-9]\.[1-9]\.[1-9]/)
 
 ################ For Testing Purposes ###################
 # sublime_packages_path = "C:/Sites/Packages"
