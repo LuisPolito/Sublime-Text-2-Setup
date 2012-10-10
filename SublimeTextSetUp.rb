@@ -4,7 +4,11 @@ require 'tmpdir'
 class Msg < String
   def colorize(color_code)
     #from StackOverflow [http://stackoverflow.com/questions/1489183/colorized-ruby-output]
-    STDOUT.tty? ? "\e[#{color_code}m#{self}\e[0m" : self
+    if STDOUT.tty?  
+      "\e[#{color_code}m#{self}\e[0m"
+    else
+      self
+    end
   end
 
   def color(*args)
