@@ -71,6 +71,7 @@ git_version = %x[git --version]
 
 #Install SASS Higlighting
 %x[git clone https://github.com/n00ge/sublime-text-haml-sass.git]
+check_exit_code()
 Dir.chdir("sublime-text-haml-sass") do
   if RUBY_ENGINE === "jruby"
     FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
