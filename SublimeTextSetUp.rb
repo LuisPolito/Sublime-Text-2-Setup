@@ -58,7 +58,7 @@ Dir.chdir(tempdir_path)
 #Test if Git is installed or exit
 git_version = %x[git --version]
   abort("Git Required") unless git_version.match(/^git version [1-9]\.[1-9]\.[1-9]/)
-# rvm_installed = !%x[which rvm].empty?
+# rvm_installed = ENV['PATH']['rvm'] #!%x[which rvm].empty?
 
 ################ For Testing Purposes ###################
 # sublime_packages_path = "#{ENV['HOME']}/.temp"
