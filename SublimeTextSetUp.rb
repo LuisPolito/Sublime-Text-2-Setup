@@ -4,24 +4,17 @@ require 'tmpdir'
 class Msg < String
   def colorize(color_code)
     #from StackOverflow [http://stackoverflow.com/questions/1489183/colorized-ruby-output]
-    if STDOUT.tty?  
-      "\e[1m\e[#{color_code}m#{self}\e[0m"
-    else
-      self
-    end
+    STDOUT.tty? ? "\e[1m\e[#{color_code}m#{self}\e[0m" : self
   end
-
   def color(*args)
-    colours = {:red => 31, :green => 32, :yellow => 33}
+    colours = {:red => 31, :green => 32, :yellow => 33, :blue => 34}
     self.send :colorize, colours[args[0]]
   end
 end
 
 #figure out windows? mac? linux? install directories
 def set_sublime_dir(system = RUBY_PLATFORM)
-   # Set Home directory.
   Dir.respond_to?(:home) ? home = Dir.home : home = ENV['HOME']
-  
   case system
   when /mingw/, /Windows/
     sublime_packages_path = home + "/AppData/Roaming/Sublime Text 2/Packages"
@@ -36,11 +29,13 @@ def set_sublime_dir(system = RUBY_PLATFORM)
     require 'java'
     java_os_result = java.lang.System.get_property('os.name')
     sublime_packages_path, sublime_user_packages_path = set_sublime_dir(java_os_result)
-    puts "JRuby support experimental" #abort("JRuby not Supported") 
-    #There is a **Bug in JRuby** Dir.cp_r copying unicode-named folders in Windows:
+    puts Msg.new("JRuby support experimental").color(:red) 
+    #abort("JRuby not Supported") 
+    #In *Winodws* there is a **Bug in JRuby** Dir.cp_r copying unicode-named folders:
     #RuntimeError: unknown file type: SASS/Commands/Insert ColorGC??.tmCommand
     #copy at C:/RailsInstaller/jruby-1.7.0.RC1/lib/ruby/1.9/fileutils.rb:1374
     #Real file name: Insert ColorGCÌ§Âª.tmCommand
+    #Also Dir.mktmpdr seems to be created in the local directory.
   end
   [sublime_packages_path, sublime_user_packages_path]
 end
@@ -54,7 +49,7 @@ end
 ## Set paths ##
 sublime_packages_path, sublime_user_packages_path = set_sublime_dir
 tempdir_path = Dir.mktmpdir
-puts "Using temp dir: #{tempdir_path}"
+puts Msg.new("Downloading to temp dir: #{tempdir_path}").color(:blue)
 Dir.chdir(tempdir_path)
 #Test paths set correctly
   raise unless File.exists?(sublime_packages_path) 
@@ -63,17 +58,19 @@ Dir.chdir(tempdir_path)
 #Test if Git is installed or exit
 git_version = %x[git --version]
   abort("Git Required") unless git_version.match(/^git version [1-9]\.[1-9]\.[1-9]/)
+# rvm_installed = !%x[which rvm].empty?
 
 ################ For Testing Purposes ###################
-# sublime_packages_path = "C:/Sites/Packages"
-# sublime_user_packages_path = "C:/Sites/User"
+# sublime_packages_path = "#{ENV['HOME']}/.temp"
+# sublime_user_packages_path = "#{ENV['HOME']}/.temp"
+# puts Msg.new("#TESTING#").color(:red)
 #########################################################
 
 #Install SASS Higlighting
 %x[git clone https://github.com/n00ge/sublime-text-haml-sass.git]
 check_exit_code()
 Dir.chdir("sublime-text-haml-sass") do
-  if RUBY_ENGINE === "jruby"
+  if RUBY_PLATFORM === "java"
     FileUtils.mv('SASS', (sublime_packages_path + "/"), :verbose => true, :force => true )
   else
     FileUtils.cp_r('SASS', sublime_packages_path)
@@ -143,7 +140,18 @@ FileUtils.rm_r('sublime_erb/.git') if File.exists?('sublime_erb/.git')
 check_exit_code()
 FileUtils.cp_r('sublime_erb', sublime_user_packages_path)
 check_exit_code()
-puts Msg.new("Installed Sublime ERB (needs manual action to complete).").color(:yellow)
-puts 'open keybindings file add   { "keys": ["ctrl+shift+."], "command": "erb" }'
+puts Msg.new("Installed Sublime ERB (needs manual action below to complete).").color(:yellow)
+puts Msg.new("open the Preferences>KeyBindings-User file and add: ").color(:yellow)
+puts %Q`{ "keys": ["ctrl+shift+."], "command": "erb" }`
 
+if RUBY_PLATFORM == "java"
+  puts Msg.new("Cleaning up Temp Directory").color(:blue)
+  FileUtils.rm_rf(tempdir_path, :verbose => true) if RUBY_PLATFORM == "java"
+end
 
+=begin
+if Linux (or Mac??) && RVM
+path on the Build System may need to be adjusted.
+  on the Packages/Ruby/Ruby.sublime-build
+  file "ruby" should be replaced w/ "/home/$USER/.rvm/bin/rvm-auto-ruby"
+=end
