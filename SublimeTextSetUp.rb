@@ -123,6 +123,17 @@ update_theme_file(sublime_packages_path) if File.exists?(sublime_packages_path +
   "/Theme - Default/Widget.sublime-settings")
 puts Msg.new("Installed RubyTest.").color(:green)
 
+#Instal Coffee-Script Build
+options = {:coffee_script => :false}
+if options[:coffee_script] && !`which coffee`.empty?
+  coffee_path = `which coffee`.chomp.split("/")[0...-1].join("/") 
+  Dir.mkdir("#{sublime_packages_path}/CoffeeScript")
+  File.open("#{sublime_packages_path}/CoffeeScript/CoffeeScript.sublime-build", "w+") do
+    puts %Q`{"cmd": ["coffee", "$file"],\n"selector" : "source.coffee",\n"path" : "#{coffee_path}"}`
+  end unless File.exists?("#{sublime_packages_path}/CoffeeScript/CoffeeScript.sublime-build")
+  puts Msg.new("Installed CoffeeScript Build").color(:green)
+end
+
 #Ones that install on the user path
 #Install Auxiliary files rails_tutorial_sublime_text
 %x[git clone git@github.com:mhartl/rails_tutorial_sublime_text.git]
@@ -148,10 +159,3 @@ if RUBY_PLATFORM == "java"
   puts Msg.new("Cleaning up Temp Directory").color(:blue)
   FileUtils.rm_rf(tempdir_path, :verbose => true) if RUBY_PLATFORM == "java"
 end
-
-=begin
-if Linux (or Mac??) && RVM
-path on the Build System may need to be adjusted.
-  on the Packages/Ruby/Ruby.sublime-build
-  file "ruby" should be replaced w/ "/home/$USER/.rvm/bin/rvm-auto-ruby"
-=end
